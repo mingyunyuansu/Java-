@@ -1,0 +1,29 @@
+import java.util.ArrayList;
+
+public class Main {
+    public static void main(String[] args) {
+        ArrayList<Number> list = new ArrayList<>();
+        for (int i = 0; i <= 1000; ++i)
+            list.add(i);
+        sort(list);
+        for (Number each: list){
+            System.out.print(each + "\t");
+        }
+    }
+
+    public static ArrayList<Number> sort(ArrayList<Number> list) {
+        for (int i = 0; i < list.size() - 1; ++i) {
+            for (int j = 0; j < list.size() - i - 1; ++j) {
+                if (list.get(j).doubleValue() < list.get(j + 1).doubleValue()) {
+                    Number tmp_j = list.get(j);
+                    Number tmp_jp1 = list.get(j + 1);
+                    list.remove(j);
+                    list.add(j, tmp_jp1);
+                    list.remove(j + 1);
+                    list.add(j + 1, tmp_j);
+                }
+            }
+        }
+        return list;
+    }
+}
