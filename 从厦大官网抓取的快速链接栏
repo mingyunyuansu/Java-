@@ -1,0 +1,37 @@
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Scanner;
+
+
+public class Main {
+    public static void main(String[] args) {
+        String address = "http://www.xmu.edu.cn";
+        try {
+            URL url = new URL(address);
+            String s, t;
+            Scanner input = new Scanner(url.openStream());
+            int start, end, count = 1;
+            while (input.hasNext()) {
+                s = input.nextLine();
+                start = s.indexOf("\" target=\"_blank\"><i class=\"icon icon-list-alt\"></i>");
+                end = s.indexOf("</a></li>", start);
+                if (start != -1 && end != -1) {
+                    t = s.substring(start + "\" target=\"_blank\"><i class=\"icon icon-list-alt\"></i>".length(), end);
+                    System.out.print("[" + count++ + "]" + t + "\t");
+                }
+                start = s.indexOf("<li><a href=\"");
+                end = s.indexOf("\" target=\"_blank\"><i class=\"icon icon-list-alt\"></i>", start);
+                if (start != -1 && end != -1) {
+                    t = s.substring(start + "<li><a href=\"".length(), end);
+                    System.out.println(t);
+                }
+            }
+            input.close();
+        } catch (MalformedURLException e) {
+            System.out.print("error");
+        } catch (IOException e1) {
+            System.out.print("error1");
+        }
+    }
+}
