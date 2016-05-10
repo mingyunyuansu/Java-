@@ -13,14 +13,14 @@ import java.util.GregorianCalendar;
 public class Main extends Application {
     public void start(Stage primaryStage) {
         ClockPane clockPane = new ClockPane();
-        primaryStage.setScene(new Scene(clockPane, 300, 300));
+        primaryStage.setScene(new Scene(clockPane, clockPane.getW(), clockPane.getH()));
         primaryStage.show();
     }
 }
 
 class ClockPane extends Pane {
     private int hour, minute, second;
-    private double w = 300, h = 300;
+    private double w = 500, h = 500;
 
     public ClockPane() {
         setCurrentTime();
@@ -54,6 +54,14 @@ class ClockPane extends Pane {
         return second;
     }
 
+    public double getW() {
+        return w;
+    }
+
+    public double getH() {
+        return h;
+    }
+
     protected void paintClock() {
         double clockRadius = Math.min(w, h) * 0.4;
         double centerX = w / 2.0;
@@ -66,26 +74,26 @@ class ClockPane extends Pane {
         Text[] texts = new Text[12];
         for (int i = 0; i < 12; ++i) {
             if (i == 0) {
-                texts[i] = new Text(centerX + (clockRadius - 12) * Math.sin(i * 2 * Math.PI / 12), centerY - (clockRadius - 12) * Math.cos(i * 2 * Math.PI / 12), 12 + "");
+                texts[i] = new Text(centerX + (clockRadius - 15) * Math.sin(i * 2 * Math.PI / 12), centerY - (clockRadius - 18) * Math.cos(i * 2 * Math.PI / 12), 12 + "");
             } else {
-                texts[i] = new Text(centerX + (clockRadius - 12) * Math.sin(i * 2 * Math.PI / 12), centerY - (clockRadius - 12) * Math.cos(i * 2 * Math.PI / 12), i + "");
+                texts[i] = new Text(centerX + (clockRadius - 15) * Math.sin(i * 2 * Math.PI / 12), centerY - (clockRadius - 18) * Math.cos(i * 2 * Math.PI / 12), i + "");
             }
             texts[i].setStroke(Color.WHITE);
         }
 
-        double sLength = clockRadius * 0.8;
+        double sLength = clockRadius * 0.75;
         double secondX = centerX + sLength * Math.sin(second * (2 * Math.PI) / 60);
         double secondY = centerY - sLength * Math.cos(second * (2 * Math.PI) / 60);
         Line sLine = new Line(centerX, centerY, secondX, secondY);
         sLine.setStroke(Color.WHITE);
 
-        double mLength = clockRadius * 0.6;
+        double mLength = clockRadius * 0.55;
         double minuteX = centerX + mLength * Math.sin(minute * 2 * Math.PI / 60);
         double minuteY = centerY - mLength * Math.cos(minute * 2 * Math.PI / 60);
         Line mLine = new Line(centerX, centerY, minuteX, minuteY);
         mLine.setStroke(Color.WHITE);
 
-        double hLength = clockRadius * 0.45;
+        double hLength = clockRadius * 0.4;
         double hourX = centerX + hLength * Math.sin((hour % 12 + minute / 60.0) * 2 * Math.PI / 12);
         double hourY = centerY - hLength * Math.cos((hour % 12 + minute / 60.0) * 2 * Math.PI / 12);
         Line hLine = new Line(centerX, centerY, hourX, hourY);
