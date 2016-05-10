@@ -15,7 +15,6 @@ public class Main extends Application {
         ClockPane clockPane = new ClockPane();
         primaryStage.setScene(new Scene(clockPane));
         primaryStage.show();
-        System.out.print(clockPane.getHour() + "\t" + clockPane.getMinute() + "\t" + clockPane.getSecond());
     }
 }
 
@@ -57,21 +56,22 @@ class ClockPane extends Pane {
 
     protected void paintClock() {
         double clockRadius = Math.min(w, h) * 0.4;
-        double centerX = w / 2;
-        double centerY = h / 2;
+        double centerX = w / 2.0;
+        double centerY = h / 2.0;
 
         Circle circle = new Circle(centerX, centerY, clockRadius);
         circle.setFill(Color.BLACK);
         circle.setStroke(Color.WHITE);
 
-        Text t1 = new Text(centerX - 5, centerY - clockRadius + 12, "12");
-        t1.setStroke(Color.WHITE);
-        Text t2 = new Text(centerX - clockRadius + 3, centerY + 5, "9");
-        t2.setStroke(Color.WHITE);
-        Text t3 = new Text(centerX + clockRadius - 10, centerX + 3, "3");
-        t3.setStroke(Color.WHITE);
-        Text t4 = new Text(centerX - 3, centerY + clockRadius - 3, "6");
-        t4.setStroke(Color.WHITE);
+        Text[] texts = new Text[12];
+        for (int i = 0; i < 12; ++i) {
+            if (i == 0) {
+                texts[i] = new Text(centerX + (clockRadius - 10) * Math.sin(i * 2 * Math.PI / 12), centerY - (clockRadius - 10) * Math.cos(i * 2 * Math.PI / 12), 12 + "");
+            } else {
+                texts[i] = new Text(centerX + (clockRadius - 10) * Math.sin(i * 2 * Math.PI / 12), centerY - (clockRadius - 10) * Math.cos(i * 2 * Math.PI / 12), i + "");
+            }
+            texts[i].setStroke(Color.WHITE);
+        }
 
         double sLength = clockRadius * 0.8;
         double secondX = centerX + sLength * Math.sin(second * (2 * Math.PI) / 60);
@@ -92,6 +92,9 @@ class ClockPane extends Pane {
         hLine.setStroke(Color.WHITE);
 
         getChildren().clear();
-        getChildren().addAll(circle, t1, t2, t3, t4, sLine, mLine, hLine);
+        getChildren().addAll(circle, sLine, mLine, hLine);
+        for (Text each : texts) {
+            getChildren().add(each);
+        }
     }
 }
