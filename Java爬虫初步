@@ -1,0 +1,56 @@
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter a url: ");
+        String url = input.nextLine();
+        crawler(url);
+    }
+
+    public static void crawler(String startingURL) {
+        ArrayList<String> pending = new ArrayList<>();
+        ArrayList<String> visited = new ArrayList<>();
+
+        pending.add(startingURL);
+        while (!pending.isEmpty() && visited.size() < 100) {
+            String urlString = pending.remove(0);
+            if (!visited.contains(urlString)) {
+                visited.add(urlString);
+                System.out.println(urlString);
+                for (String each_s : getSubURLs(urlString)) {
+                    if (!visited.contains(each_s)) {
+                        pending.add(each_s);
+                    }
+                }
+            }
+        }
+    }
+
+    public static ArrayList<String> getSubURLs(String urlString) {
+        ArrayList<String> list = new ArrayList<>();
+        try {
+            URL url = new URL(urlString);
+            Scanner input = new Scanner(url.openStream());
+            int current = 0;
+            while (input.hasNext()) {
+                String l = input.nextLine();
+                current = l.indexOf("http:", current);
+                while (current > 0) {
+                    int end = l.indexOf("\"", current);
+                    if (end > 0) {
+                        list.add(l.substring(current, end));
+                        current = l.indexOf("http:", end);
+                    } else
+                        current = -1;
+                }
+            }
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+        return list;
+    }
+
+}
